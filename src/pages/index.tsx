@@ -29,7 +29,7 @@ const IndexPage = () => {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
             <Link
-              to="/signup"
+              to="/login"
               className="inline-flex items-center justify-center rounded-full text-sm md:text-base font-medium border border-input bg-background shadow-sm hover:bg-secondary h-11 px-8"
             >
               Se connecter
