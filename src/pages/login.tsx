@@ -1,22 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useUser } from "@/context/user-context";
+import { loginUser } from "@/services/user";
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
 
-type User = {
+type UserInfo = {
   email: string;
   password: string;
 };
 
 const LoginPage = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const { user, setUser } = useUser();
+
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!user.email || !user.password) {
+    if (!userInfo.email || !userInfo.password) {
       toast.error("Veuillez remplir tous les champs");
       return;
     }
@@ -24,9 +33,9 @@ const LoginPage = () => {
     setIsLoading(true);
 
     try {
-      //await loginUser(email, password);
+      const user = await loginUser(userInfo.email, userInfo.password);
       toast.success("Connexion réussie");
-      //onAuthSuccess();
+      setUser(user);
     } catch (error: unknown) {
       toast.error("Erreur lors de la connexion", {
         description: error instanceof Error ? error.message : "Erreur inconnue",
@@ -44,29 +53,30 @@ const LoginPage = () => {
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleLogin}>
           <div className="space-y-2">
-            <Label htmlFor="email-register">Email</Label>
+            <Label htmlFor="email-login">Email</Label>
             <Input
-              id="email-register"
+              id="email-login"
               type="email"
               placeholder="exemple@email.com"
-              value={user?.email}
-              onChange={(e) => setUser({ ...user, email: e.target.value })}
+              value={userInfo?.email}
+              onChange={(e) =>
+                setUserInfo({ ...userInfo, email: e.target.value })
+              }
               required
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password-register">Mot de passe</Label>
+            <Label htmlFor="password-login">Mot de passe</Label>
             <Input
-              id="password-register"
+              id="password-login"
               type="password"
-              value={user?.password}
-              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              value={userInfo?.password}
+              onChange={(e) =>
+                setUserInfo({ ...userInfo, password: e.target.value })
+              }
               required
               minLength={6}
             />
-            <p className="text-xs text-muted-foreground">
-              Le mot de passe doit comporter au moins 6 caractères
-            </p>
           </div>
 
           <div>
