@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { useUser } from "@/context/user-context";
 import { loginUser } from "@/services/user";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, redirect } from "react-router-dom";
 import { toast } from "sonner";
 
 type UserInfo = {
@@ -36,6 +36,7 @@ const LoginPage = () => {
       const user = await loginUser(userInfo.email, userInfo.password);
       toast.success("Connexion réussie");
       setUser(user);
+      redirect("/");
     } catch (error: unknown) {
       toast.error("Erreur lors de la connexion", {
         description: error instanceof Error ? error.message : "Erreur inconnue",
@@ -46,7 +47,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+    <div className="flex flex-1 flex-col justify-center px-6 lg:px-8">
       <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight">
         Connectez-vous à votre compte
       </h2>
@@ -88,6 +89,9 @@ const LoginPage = () => {
             </Button>
           </div>
         </form>
+        <p className="text-center text-sm mt-6">
+          Pas encore de compte ? Inscrivez-vous dès maintenant
+        </p>
       </div>
     </div>
   );

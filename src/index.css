@@ -115,6 +115,15 @@
   html {
     @apply scroll-smooth;
   }
+  .message-bubble-bot {
+    @apply bg-primary/10 dark:bg-primary/20 p-4 rounded-2xl rounded-tl-sm;
+  }
+  .message-bubble-user {
+    @apply bg-secondary text-secondary-foreground p-4 rounded-2xl rounded-tr-sm;
+  }
+  .glass-panel {
+    @apply backdrop-blur-lg bg-white/80 dark:bg-black/30 border border-white/20 dark:border-white/10  shadow-lg;
+  }
 }
 
 @layer utilities {

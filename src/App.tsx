@@ -6,6 +6,7 @@ import IndexPage from "./pages";
 import { Toaster } from "./components/ui/sonner";
 import LoginPage from "./pages/login";
 import { UserProvider } from "./context/user-context";
+import { ChatProvider } from "./context/chat-context";
 
 const App = () => {
   // On component mount, check for theme preference
@@ -22,16 +23,18 @@ const App = () => {
 
   return (
     <UserProvider>
-      <BrowserRouter>
-        <Layout>
-          <Toaster />
-          <Routes>
-            <Route path="/" element={<IndexPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
+      <ChatProvider>
+        <BrowserRouter>
+          <Layout>
+            <Toaster />
+            <Routes>
+              <Route path="/" element={<IndexPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </ChatProvider>
     </UserProvider>
   );
 };

@@ -1,5 +1,7 @@
 import { auth } from "@/lib/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
+import { getUserById } from "@/services/user";
+import { User } from "@/types";
+import { onAuthStateChanged, User as AuthUser } from "firebase/auth";
 import {
   createContext,
   useContext,
@@ -20,8 +22,9 @@ export function UserProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user: User | null) => {
-      if (user) {
+    onAuthStateChanged(auth, async (authUser: AuthUser | null) => {
+      if (authUser) {
+        const user = await getUserById(authUser.uid);
         setUser(user);
       }
     });
