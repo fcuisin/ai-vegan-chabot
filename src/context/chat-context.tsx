@@ -1,4 +1,5 @@
-import { TONE_OPTIONS } from "@/types";
+import { generateOpenAiResponse } from "@/lib/openai";
+import { TONES } from "@/types";
 import {
   createContext,
   useContext,
@@ -8,6 +9,8 @@ import {
   useCallback,
 } from "react";
 
+const MAX_USE_COUNT = 3;
+
 export interface Message {
   content: string;
   isBot: boolean;
@@ -16,10 +19,10 @@ export interface Message {
 
 interface ChatContextType {
   messages: Message[];
-  tone: TONE_OPTIONS;
+  tone: TONES;
   isTyping: boolean;
   setMessages: (messages: Message[]) => void;
-  setTone: (tone: TONE_OPTIONS) => void;
+  setTone: (tone: TONES) => void;
   sendMessageHandler: (message: string, isFirst?: boolean) => void;
 }
 
@@ -28,47 +31,56 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 export function ChatProvider({ children }: Readonly<{ children: ReactNode }>) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [tone, setTone] = useState<TONE_OPTIONS>(TONE_OPTIONS.educative);
+  const [tone, setTone] = useState<TONES | null>();
+  const [useCount, setUseCount] = useState<number>(0);
 
-  const sendMessageHandler = useCallback(async (message: string) => {
-    if (!message || message.trim() === "") return;
+  const sendMessageHandler = useCallback(
+    async (message: string) => {
+      if (!message || message.trim() === "") return;
 
-    const messageToAdd: Message = { content: message, isBot: false };
-    setMessages((prev) => [...prev, messageToAdd]);
+      const messageToAdd: Message = { content: message, isBot: false };
+      setMessages((prev) => [...prev, messageToAdd]);
 
-    setIsTyping(true);
+      setIsTyping(true);
 
-    try {
-      /* const botResponse = await generateChatResponse(userMessage, apiKey, tone);
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: botResponse.text,
-          isBot: true,
-          sources: botResponse.sources,
-        },
-      ]); */
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: "BOT",
-          isBot: true,
-        },
-      ]);
-    } catch (error: unknown) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          content: `Désolé, une erreur s'est produite lors de la génération de la réponse: ${
-            error instanceof Error ? error.message : "Erreur inconnue"
-          }`,
-          isBot: true,
-        },
-      ]);
-    } finally {
-      setIsTyping(false);
-    }
-  }, []);
+      if (useCount > MAX_USE_COUNT) {
+        return setMessages((prev) => [
+          ...prev,
+          {
+            content:
+              "Vous avez utilisé tous les crédits gratuits disponibles. Pour une utilisation illimité de VegaBot, ajouter votre clé API OpenAI.",
+            isBot: true,
+          },
+        ]);
+      }
+
+      try {
+        const botResponse = await generateOpenAiResponse(message, tone);
+        setMessages((prev) => [
+          ...prev,
+          {
+            content: botResponse.text,
+            isBot: true,
+            sources: botResponse.sources,
+          },
+        ]);
+        setUseCount(useCount + 1);
+      } catch (error: unknown) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            content: `Désolé, une erreur s'est produite lors de la génération de la réponse: ${
+              error instanceof Error ? error.message : "Erreur inconnue"
+            }`,
+            isBot: true,
+          },
+        ]);
+      } finally {
+        setIsTyping(false);
+      }
+    },
+    [tone, useCount]
+  );
 
   const value = useMemo(
     () => ({

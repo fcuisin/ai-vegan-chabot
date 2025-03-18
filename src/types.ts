@@ -1,8 +1,8 @@
-export enum TONE_OPTIONS {
-  educative = "Éducatif",
-  sarcastic = "Sarcastique",
-  humorous = "Humoristique",
-  motivational = "Motivant",
+export enum TONES {
+  educative = "educative",
+  sarcastic = "sarcastic",
+  humorous = "humorous",
+  motivational = "motivational",
 }
 
 export type User = {

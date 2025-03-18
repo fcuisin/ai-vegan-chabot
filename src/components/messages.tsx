@@ -1,4 +1,4 @@
-import { SparklesIcon } from "lucide-react";
+import { Leaf } from "lucide-react";
 
 import { motion } from "framer-motion";
 import { useChat } from "@/context/chat-context";
@@ -10,22 +10,20 @@ import PreviewMessage from "./message";
 const WaitingMessage = () => {
   return (
     <motion.div
-      data-testid="message-assistant-loading"
       className="w-full mx-auto max-w-3xl px-4 group/message "
       initial={{ y: 5, opacity: 0 }}
-      animate={{ y: 0, opacity: 1, transition: { delay: 1 } }}
-      //data-role={role}
+      animate={{ y: 0, opacity: 1, transition: { delay: 0.1 } }}
     >
       <div
         className={cn(
-          "flex gap-4 group-data-[role=user]/message:px-3 w-full group-data-[role=user]/message:w-fit group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl group-data-[role=user]/message:py-2 rounded-xl",
+          "flex gap-4 group-data-[bot=false]/message:px-3 w-full group-data-[bot=false]/message:w-fit group-data-[bot=false]/message:ml-auto group-data-[bot=false]/message:max-w-2xl group-data-[bot=false]/message:py-2 rounded-xl",
           {
-            "group-data-[role=user]/message:bg-muted": true,
+            "group-data-[bot=false]/message:bg-muted": true,
           }
         )}
       >
         <div className="size-8 flex items-center rounded-full justify-center ring-1 shrink-0 ring-border">
-          <SparklesIcon size={14} />
+          <Leaf size={14} />
         </div>
 
         <div className="flex flex-col gap-2 w-full">
@@ -56,7 +54,7 @@ const Messages = () => {
 
       {isTyping &&
         messages.length > 0 &&
-        messages[messages.length - 1].isBot && <WaitingMessage />}
+        !messages[messages.length - 1].isBot && <WaitingMessage />}
 
       <div
         ref={messagesEndRef}

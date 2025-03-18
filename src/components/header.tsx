@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Sprout } from "lucide-react";
 import ThemeToggle from "./theme";
+import { Button } from "./ui/button";
 
 const Header = () => {
   return (
@@ -13,14 +14,9 @@ const Header = () => {
         <span className="font-semibold text-xl">VegaBot</span>
       </Link>
       <div className="flex items-center gap-4">
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link
-            to="login"
-            className="text-sm/6 font-semibold text-gray-900 dark:text-white"
-          >
-            Se connecter
-          </Link>
-        </div>
+        <Button className="bg-transparent border hover:bg-secondary text-sm/6 font-semibold text-gray-900 dark:text-white cursor-pointer">
+          <Link to="/login">Se connecter</Link>
+        </Button>
         <ThemeToggle />
       </div>
     </header>

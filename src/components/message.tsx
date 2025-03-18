@@ -29,6 +29,26 @@ const PreviewMessage = ({ message }: Readonly<{ message: Message }>) => {
           >
             <p>{message.content}</p>
           </div>
+
+          {message.sources && message.sources.length > 0 && (
+            <div className="mt-3 pt-3 border-t border-primary/10 text-xs text-muted-foreground">
+              <p className="font-medium mb-1">Sources:</p>
+              <ul className="list-disc pl-4 space-y-1">
+                {message.sources.map((source, index) => (
+                  <li key={index}>
+                    <a
+                      href={source}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline text-primary"
+                    >
+                      {source.replace(/^https?:\/\//, "").split("/")[0]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </motion.div>
     </AnimatePresence>

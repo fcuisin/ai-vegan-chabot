@@ -10,16 +10,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { TONE_OPTIONS } from "@/types";
+import { TONES } from "@/types";
+import { TONE_OPTIONS } from "@/lib/utils";
 
 const Input = ({ rows = 4 }: { rows?: number }) => {
   const [input, setInput] = useState<string>("");
-  const { sendMessageHandler, setTone } = useChat();
+  const { sendMessageHandler, setTone, tone } = useChat();
 
   return (
     <div className="relative w-full flex flex-col gap-4">
       <Textarea
-        //ref={textareaRef}
         placeholder="Posez votre question sur le véganisme..."
         value={input}
         onChange={(e) => setInput(e.currentTarget.value)}
@@ -40,14 +40,14 @@ const Input = ({ rows = 4 }: { rows?: number }) => {
       />
 
       <div className="absolute bottom-0 p-2 w-fit flex flex-row justify-start">
-        <Select onValueChange={(value: TONE_OPTIONS) => setTone(value)}>
+        <Select onValueChange={(value) => setTone(TONES[value])} value={tone}>
           <SelectTrigger className="inline-flex border-transparent shadow-none focus:border-transparent focus:ring-0 dark:text-primary-foreground">
             <SelectValue placeholder="Choisissez un ton" />
           </SelectTrigger>
           <SelectContent>
-            {Object.values(TONE_OPTIONS).map((tone) => (
+            {Object.keys(TONES).map((tone) => (
               <SelectItem key={tone} value={tone}>
-                {tone}
+                {TONE_OPTIONS[tone]}
               </SelectItem>
             ))}
           </SelectContent>
