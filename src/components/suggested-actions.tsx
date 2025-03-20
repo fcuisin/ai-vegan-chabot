@@ -34,7 +34,7 @@ const SuggestedActions = () => {
   if (messages.length > 0) return null;
 
   return (
-    <div className="grid w-full mx-auto sm:grid-cols-2 gap-2 w-full md:max-w-3xl">
+    <div className="grid w-full mx-auto sm:grid-cols-2 gap-2 w-full md:max-w-3xl overflow-x-auto">
       {suggestedActions.map((suggestedAction, index) => (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
