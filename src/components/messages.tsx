@@ -44,18 +44,17 @@ const Messages = () => {
   return (
     <div
       ref={messagesContainerRef}
-      className="flex flex-col min-w-0 gap-6 flex-1 overflow-y-scroll pt-4"
+      className={`flex flex-col ${
+        messages.length === 0 ? "justify-center" : ""
+      } min-w-0 gap-6 flex-1 overflow-y-scroll pt-4`}
     >
       {messages.length === 0 && <Hero />}
-
       {messages.map((message, index) => (
         <PreviewMessage key={index} message={message} />
       ))}
-
       {isTyping &&
         messages.length > 0 &&
         !messages[messages.length - 1].isBot && <WaitingMessage />}
-
       <div
         ref={messagesEndRef}
         className="shrink-0 min-w-[24px] min-h-[24px]"

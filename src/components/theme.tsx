@@ -39,7 +39,6 @@ export const ThemeToggle = () => {
     <button
       onClick={toggleTheme}
       className="relative inline-flex items-center justify-center w-10 h-10 rounded-full transition-colors hover:bg-secondary text-foreground"
-      aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       <div className="relative overflow-hidden w-5 h-5">
         <Sun

@@ -1,8 +1,13 @@
+import { useChat } from "@/context/chat-context";
 import { Leaf } from "lucide-react";
 
 const Hero = () => {
+  const { messages } = useChat();
+
+  if (messages.length > 0) return null;
+
   return (
-    <div className="flex flex-col items-center text-center mt-20 px-6 md:px-0">
+    <div className="flex flex-col items-center text-center px-6 md:px-0">
       <div className="rounded-full bg-primary/10 p-3 mb-2">
         <Leaf className="h-8 w-8 text-primary" />
       </div>

@@ -9,8 +9,6 @@ import {
   useCallback,
 } from "react";
 
-const MAX_USE_COUNT = 3;
-
 export interface Message {
   content: string;
   isBot: boolean;
@@ -23,7 +21,7 @@ interface ChatContextType {
   isTyping: boolean;
   setMessages: (messages: Message[]) => void;
   setTone: (tone: TONES) => void;
-  sendMessageHandler: (message: string, isFirst?: boolean) => void;
+  sendMessageHandler: (message: string) => void;
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
@@ -42,17 +40,6 @@ export function ChatProvider({ children }: Readonly<{ children: ReactNode }>) {
       setMessages((prev) => [...prev, messageToAdd]);
 
       setIsTyping(true);
-
-      if (useCount > MAX_USE_COUNT) {
-        return setMessages((prev) => [
-          ...prev,
-          {
-            content:
-              "Vous avez utilisé tous les crédits gratuits disponibles. Pour une utilisation illimité de VegaBot, ajouter votre clé API OpenAI.",
-            isBot: true,
-          },
-        ]);
-      }
 
       try {
         const botResponse = await generateOpenAiResponse(message, tone);
